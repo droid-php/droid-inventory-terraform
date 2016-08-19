@@ -54,7 +54,7 @@ class GenerateCommand extends Command
                 $name = $attributes['name'];
                 $groupNames = explode(', ', $attributes['group']);
                 $yaml .= "  " . $name . ":\n";
-                $yaml .= "    region: \"" . $attributes['region'] . "\"\n";
+                //$yaml .= "    region: \"" . $attributes['region'] . "\"\n";
                 if (isset($attributes['ip_address'])) {
                     $yaml .= "    public_ip: " . $attributes['ip_address'] . "\n";
                 }
