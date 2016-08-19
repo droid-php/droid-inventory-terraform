@@ -1,0 +1,25 @@
+{
+    "name": "droid/droid-inventory-terraform",
+    "description": "Droid inventory Terraform",
+    "homepage": "http://www.github.com/droid-php/droid-inventory-terraform",
+    "keywords": ["php", "droid", "terraform"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "LinkORB Engineering",
+            "email": "engineering@linkorb.com",
+            "role": "Development"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "droid/droid-model": "~1.0",
+        "symfony/console": "~2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Droid\\Inventory\\Terraform\\": "src/"
+        }
+    },
+    "license": "MIT"
+}
