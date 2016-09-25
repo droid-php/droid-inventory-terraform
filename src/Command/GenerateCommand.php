@@ -49,21 +49,46 @@ class GenerateCommand extends Command
         $resourceData = $data['modules'][0]['resources'];
         $groupMap = [];
         foreach ($resourceData as $key => $details) {
-            if ($details['type'] == 'linode_linode') {
-                $attributes = $details['primary']['attributes'];
-                $name = $attributes['name'];
-                $groupNames = explode(', ', $attributes['group']);
-                $yaml .= "  " . $name . ":\n";
-                //$yaml .= "    region: \"" . $attributes['region'] . "\"\n";
-                if (isset($attributes['ip_address'])) {
-                    $yaml .= "    public_ip: " . $attributes['ip_address'] . "\n";
-                }
-                if (isset($attributes['private_ip_address'])) {
-                    $yaml .= "    private_ip: " . $attributes['private_ip_address'] . "\n";
-                }
-                foreach ($groupNames as $groupName) {
-                    $groupMap[$groupName][] = $name;
-                }
+            $attributes = $details['primary']['attributes'];
+            switch ($details['type']) {
+                case "linode_linode":
+                    $name = $attributes['name'];
+                    $groupNames = explode(', ', $attributes['group']);
+                    $yaml .= "  " . $name . ":\n";
+                    if (isset($attributes['ip_address'])) {
+                        $yaml .= "    public_ip: " . $attributes['ip_address'] . "\n";
+                    }
+                    if (isset($attributes['private_ip_address'])) {
+                        $yaml .= "    private_ip: " . $attributes['private_ip_address'] . "\n";
+                    }
+                    foreach ($groupNames as $groupName) {
+                        $groupMap[$groupName][] = $name;
+                    }
+                    break;
+                case "digitalocean_droplet":
+                    $name = $attributes['name'];
+
+                    $groupNames = [];
+                    for ($i = 0; $i<100; $i++) {
+                        if (isset($attributes['tags.' . $i])) {
+                            $groupNames[] = $attributes['tags.' . $i];
+                        }
+                    }
+                    
+                    $yaml .= "  " . $name . ":\n";
+                    if (isset($attributes['ipv4_address'])) {
+                        $yaml .= "    public_ip: " . $attributes['ipv4_address'] . "\n";
+                    }
+                    if (isset($attributes['ipv4_address_private'])) {
+                        $yaml .= "    private_ip: " . $attributes['ipv4_address_private'] . "\n";
+                    }
+                    foreach ($groupNames as $groupName) {
+                        $groupMap[$groupName][] = $name;
+                    }
+
+                default:
+                    // ignoring resource type
+                    break;
             }
         }
         
